@@ -1,0 +1,13 @@
+# -*- ruby -*-
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+
+require 'evoker'
+
+desc "foo"
+Evoker::entity :foo do |t|
+  sh "mkdir -p foo/bar"
+  sh "echo xyzzy > foo/bar/baz"
+end
+
+desc "Everything"
+task :default => [ :foo ]
