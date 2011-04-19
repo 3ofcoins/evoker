@@ -39,3 +39,7 @@ Then /^last command output does not contain: (.*)$/ do |output|
   File.read("#{DIR}/.log").should_not include(output)
 end
 
+Then /^last command output matches \/(.*)\/$/ do |rx|
+  File.read("#{DIR}/.log").should match(rx)
+end
+

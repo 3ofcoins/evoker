@@ -1,0 +1,18 @@
+# -*- ruby -*-
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+
+require 'evoker'
+require 'evoker/python'
+
+include Evoker
+
+virtualenv :python,
+  :args => "--no-site-packages",
+  :download_virtualenv => true
+
+desc "python requirements"
+pipreqs = 
+  pip_requirements "requirements.txt",
+    :virtualenv => :python
+
+task :default => pipreqs
