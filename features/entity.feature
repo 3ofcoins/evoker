@@ -1,7 +1,8 @@
 Feature: Basic Entity tasks work
 
-Given a clean working directory
-  And entity example as Rakefile
+Background:
+     Given a clean working directory
+       And entity example as Rakefile
 
 Scenario: run example rakefile on empty directory
  When I run: rake
