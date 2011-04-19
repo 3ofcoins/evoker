@@ -1,0 +1,14 @@
+# -*- ruby -*-
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+
+require 'evoker'
+
+Evoker::wget 'http://www.kernel.org/kdist/finger_banner'
+
+Evoker::wget 'http://www.kernel.org/kdist/finger_banner',
+  :output_file => "other_finger_banner"
+
+task :default => [
+  "finger_banner",
+  "other_finger_banner"
+]
