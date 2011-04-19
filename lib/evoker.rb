@@ -4,6 +4,10 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'rake'
 require 'rake/clean'
 
+require 'evoker/version'
+
+# Evoker is a tool to manage external dependencies of a project using
+# Rake to run downloads.
 module Evoker
   class EntityTask < Rake::FileTask
     attr_reader :config
