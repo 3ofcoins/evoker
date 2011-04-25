@@ -3,6 +3,8 @@
 require 'evoker'
 
 module Evoker
+  PYTHON = ENV['PYTHON'] || 'python'
+  PIP = ENV['PIP'] || 'pip'
 
   # Create Python virtual environment
   def virtualenv(*args)
@@ -13,7 +15,7 @@ module Evoker
     end
     
     if opts[:download_virtualenv]
-      opts[:python] ||= 'python'
+      opts[:python] ||= PYTHON
       opts[:virtualenv] = "#{opts[:python]} ./virtualenv.py"
       opts[:virtualenv_version] ||= '1.6'
       opts[:virtualenv_url] ||= "http://github.com/pypa/virtualenv/raw/#{opts[:virtualenv_version]}/virtualenv.py"
@@ -57,7 +59,7 @@ module Evoker
     if args[:virtualenv]
       args[:pip] = "#{args[:virtualenv]}/bin/pip"
     else
-      args[:pip] ||= 'pip'
+      args[:pip] ||= PIP
     end
     pip_cmd = "#{args[:pip]}"
     pip_cmd << " #{args[:args]}" if args[:args]
