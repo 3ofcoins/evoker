@@ -11,6 +11,13 @@ Given /^(\S+) example as Rakefile$/ do |example|
   FileUtils.cp "examples/Rakefile.#{example}", "#{DIR}/Rakefile"
 end
 
+Given /^(\S+) example file in work dir$/ do |example|
+  FileUtils.cp "examples/#{example}", "#{DIR}/#{example}"
+end
+Given /^(\S+) file as (\S+)$/ do |file, target|
+  FileUtils.cp "features/#{file}", "#{DIR}/#{target}"
+end
+
 When /^I run: (.*)$/ do |command|
   system "cd #{DIR} ; #{command} > .log 2>&1"
 end

@@ -3,8 +3,9 @@
 require 'evoker'
 
 module Evoker
-  PYTHON = ENV['PYTHON'] || 'python'
-  PIP = ENV['PIP'] || 'pip'
+  smart_const(:python, 'python')
+  smart_const(:pip, 'pip')
+  smart_const(:virtualenv_version, '1.6.1')
 
   # Create Python virtual environment
   def virtualenv(*args)
@@ -15,9 +16,9 @@ module Evoker
     end
     
     if opts[:download_virtualenv]
-      opts[:python] ||= PYTHON
+      opts[:python] ||= smart_const_get(:python)
       opts[:virtualenv] = "#{opts[:python]} ./virtualenv.py"
-      opts[:virtualenv_version] ||= '1.6'
+      opts[:virtualenv_version] ||= smart_const_get(:virtualenv_version)
       opts[:virtualenv_url] ||= "http://github.com/pypa/virtualenv/raw/#{opts[:virtualenv_version]}/virtualenv.py"
       wget_virtualenv = wget opts[:virtualenv_url],
         :args => '--no-check-certificate',
@@ -59,7 +60,7 @@ module Evoker
     if args[:virtualenv]
       args[:pip] = "#{args[:virtualenv]}/bin/pip"
     else
-      args[:pip] ||= PIP
+      args[:pip] ||= smart_const_get(:pip)
     end
     pip_cmd = "#{args[:pip]}"
     pip_cmd << " #{args[:args]}" if args[:args]

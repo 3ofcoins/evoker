@@ -140,4 +140,40 @@ module Evoker
     end
   end
   module_function :git
+
+  private
+
+  # Define smart constant's default
+  # @param name [#to_s] constant's name (will be upcased)
+  # @param default constant's default value
+  def self.smart_const(name, default)
+    @@SMART_CONST_DEFAULTS ||= {}
+    @@SMART_CONST_DEFAULTS[name.to_s.upcase] = default
+  end
+
+  # Get smart constant's effective value
+  # 
+  # Effective value is:
+  # 1. `ENV[name.to_s.upcase]` if present
+  # 2. Otherwise, user-defined top-level constant named `name.to_s.upcase`
+  # 3. Otherwise, default set with {smart_const}
+  # 4. Otherwise, nil
+  # 
+  # @param name [#to_s] constant's name
+  def smart_const_get(name)
+    name = name.to_s.upcase
+    puts "smg #{name}"
+    if ENV.has_key?(name)
+      puts "ENV => #{ENV[name]}"
+      ENV[name]
+    elsif Object.const_defined?(name)
+      puts "const_get => #{Object.const_get(name)}"
+      Object.const_get(name)      
+    else
+      @@SMART_CONST_DEFAULTS ||= {}
+      puts "@SMART_CONST_DEFAULTS => #{@@SMART_CONST_DEFAULTS[name]}"
+      @@SMART_CONST_DEFAULTS[name]
+    end
+  end
+  module_function :smart_const_get
 end

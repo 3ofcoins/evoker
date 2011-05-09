@@ -36,10 +36,23 @@ module Evoker
       end
       sh "tar -czf #{CACHE_TARBALL} --exclude '#{CACHE_BASENAME}*.tgz' ."
       puts "INFO: uploading #{CACHE_TARBALL} to #{CACHE_S3_BUCKET}..."
-      File.open(CACHE_TARBALL, 'r') do |tarball|
-        bucket.files.create(
-          :key => CACHE_TARBALL,
-          :body => tarball)
+
+      # retry upload 3 times
+      _tries = 0
+      begin
+        File.open(CACHE_TARBALL, 'r') do |tarball|
+          bucket.files.create(
+            :key => CACHE_TARBALL,
+            :body => tarball)
+        end
+      rescue
+        _tries += 1
+        if _tries <= 3
+          puts "WARN: retrying #{_tries}/3: #{$!}"
+          retry
+        else
+          raise
+        end
       end
     end
 

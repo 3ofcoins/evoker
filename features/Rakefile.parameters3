@@ -1,0 +1,11 @@
+# -*- ruby -*-
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+
+PYTHON = 'python2.6'
+
+require 'evoker'
+require 'evoker/python'
+
+task :print_python do
+  puts "PYTHON=#{Evoker::smart_const_get(:PYTHON)}"
+end

@@ -1,10 +1,10 @@
 Feature: Python virtualenv can be created
 
-Background:
-      Given a clean working directory
-        And virtualenv example as Rakefile
-
 Scenario: create virtual environment
+    Given a clean working directory
+      And virtualenv example as Rakefile
+      And requirements.txt example file in work dir
+
      When I run: rake
      Then file python.stamp exists
       And directory python/ exists
