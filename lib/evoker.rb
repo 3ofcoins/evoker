@@ -14,6 +14,8 @@ require 'evoker/version'
 # Evoker is a tool to manage external dependencies of a project using
 # Rake to run downloads.
 module Evoker
+  extend Rake::DSL
+
   # {Rake::FileList} of defined entities
   # @example can be used as dependency for the default target
   #   task :default => Evoker::ENTITIES
@@ -162,16 +164,12 @@ module Evoker
   # @param name [#to_s] constant's name
   def smart_const_get(name)
     name = name.to_s.upcase
-    puts "smg #{name}"
     if ENV.has_key?(name)
-      puts "ENV => #{ENV[name]}"
       ENV[name]
     elsif Object.const_defined?(name)
-      puts "const_get => #{Object.const_get(name)}"
       Object.const_get(name)      
     else
       @@SMART_CONST_DEFAULTS ||= {}
-      puts "@SMART_CONST_DEFAULTS => #{@@SMART_CONST_DEFAULTS[name]}"
       @@SMART_CONST_DEFAULTS[name]
     end
   end

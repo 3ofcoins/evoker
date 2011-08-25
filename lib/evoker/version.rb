@@ -2,7 +2,7 @@ module Evoker
   module VERSION
     MAJOR = 0
     MINOR = 0
-    TINY  = 5
+    TINY  = 6
     STRING = [MAJOR, MINOR, TINY].join('.')
 
     def VERSION.require_version(major, minor=0, tiny=0)

@@ -19,7 +19,7 @@ EOF
   s.homepage = "http://github.com/mpasternacki/evoker"
   s.licenses = ['BSD']
 
-  s.add_dependency "rake"
+  s.add_dependency("rake", ">= 0.9.2")
 
   s.required_rubygems_version = ">= 1.3.6"
   s.files = Dir.glob("lib/**/*.rb") + %w(LICENSE)
