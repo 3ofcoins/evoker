@@ -109,14 +109,14 @@ module Evoker
     entity name do |t|
       cmd = "#{opts[:svn]}"
       cmd << " #{opts[:svn_args]}" if opts[:svn_args]
-      cmd << " #{t.config[:svn_args]}" if t.config[:svn_args]
+      cmd << " #{t.config[:svn_args]}" if t.config && t.config[:svn_args]
       cmd << " checkout -q"
       cmd << " #{opts[:checkout_args]}" if opts[:checkout_args]
-      cmd << " #{t.config[:checkout_args]}" if t.config[:checkout_args]
+      cmd << " #{t.config[:checkout_args]}" if t.config && t.config[:checkout_args]
       cmd << " -r #{opts[:revision]}" if opts[:revision]
-      cmd << " -r #{t.config[:revision]}" if t.config[:revision]
+      cmd << " -r #{t.config[:revision]}" if t.config && t.config[:revision]
       cmd << " #{opts[:url]}" if opts[:url]
-      cmd << " #{t.config[:url]}" if t.config[:url]
+      cmd << " #{t.config[:url]}" if t.config && t.config[:url]
       cmd << " #{t.name}"
       sh cmd
     end
@@ -129,12 +129,12 @@ module Evoker
     entity name do |t|
       cmd = "#{opts[:git]} clone"
       cmd << " #{opts[:clone_args]}" if opts[:clone_args]
-      cmd << " #{t.config[:clone_args]}" if t.config[:clone_args]
+      cmd << " #{t.config[:clone_args]}" if t.config && t.config[:clone_args]
       cmd << " #{opts[:url]}" if opts[:url]
-      cmd << " #{t.config[:url]}" if t.config[:url]
+      cmd << " #{t.config[:url]}" if t.config && t.config[:url]
       cmd << " #{t.name}"
 
-      if rev = opts[:revision] || t.config[:revision]
+      if rev = opts[:revision] || ( t.config && t.config[:revision] )
         cmd << " && cd #{t.name}" \
           " && #{opts[:git]} checkout -b evoker-checkout #{rev}"
       end
