@@ -143,6 +143,22 @@ module Evoker
   end
   module_function :git
 
+  # Check out Mercurial repository
+  def mercurial(name, opts={})
+    opts[:hg] ||= "hg"
+    entity name do |t|
+      cmd = "#{opts[:hg]} clone"
+      cmd << " #{args}" if args = opts[:clone_args] || ( t.config && t.config[:clone_args] )
+      cmd << " -r #{opts[:revision]}" if opts[:revision]
+      cmd << " -r #{t.config[:revision]}" if t.config && t.config[:revision]
+      cmd << " #{opts[:url]}" if opts[:url]
+      cmd << " #{t.config[:url]}" if t.config && t.config[:url]
+      cmd << " #{t.name}"
+      sh cmd
+    end
+  end
+  module_function :mercurial
+
   private
 
   # Define smart constant's default
