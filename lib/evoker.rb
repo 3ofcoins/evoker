@@ -159,6 +159,43 @@ module Evoker
   end
   module_function :mercurial
 
+  # Download & unpack a tarball
+  def tarball(basename, options={})
+    tarball = wget options[:url], options[:wget_options]||{}
+    entity basename => tarball do |t|
+      dirname = options[:dirname] || File.basename(tarball.name, options[:ext] || '.tar.gz')
+      rm_rf dirname
+      sh "#{options[:decompress] || 'tar -xzf'} #{tarball}"
+      ln_s dirname, basename unless options[:no_symlink]
+    end
+  end
+  module_function :tarball
+
+  # Apply patch to an entity
+  def patch(entity_name, patches, patch_args=nil)
+    task entity_name => patches do |t|
+      patches = [ patches ] unless patches.respond_to?(:each)
+      cmd = "set -e -x\ncd #{t.name}\n"
+      patches.each do |patch|
+        cmd << "patch #{patch_args} < ../#{patch}\n"
+      end
+      sh cmd
+    end
+  end
+  module_function :patch
+
+  # Entity that is a symlink to another path
+  # (FIXME:rename)
+  def symlink_(target, original, args={})
+    entity target => original do
+      require 'pathname'
+      original = Pathname.new(original.to_s).relative_path_from(
+        Pathname.new(File.dirname(original.to_s)))
+      ln_sf original.to_s, target.to_s
+    end
+  end
+  module_function :symlink_
+
   private
 
   # Define smart constant's default
