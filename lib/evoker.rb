@@ -29,7 +29,7 @@ module Evoker
     def initialize(*args, &block)
       super(*args, &block)
       @stampname = "#{@name}.stamp"
-      @actions << lambda { |*args| rm_rf @name }
+      @actions << lambda { |*args| FileUtils::rm_rf @name }
       CLOBBER.add([@stampname, @name])
       ENTITIES.add(@name)
 
