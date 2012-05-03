@@ -21,6 +21,7 @@ module Evoker
   #   task :default => Evoker::ENTITIES
   ENTITIES = Rake::FileList[]
 
+  # Specialized task class for downloaded entities
   class EntityTask < Rake::FileTask
     ##
     # Parsed yaml config for the task
@@ -209,10 +210,10 @@ module Evoker
   # Get smart constant's effective value
   # 
   # Effective value is:
-  # 1. `ENV[name.to_s.upcase]` if present
+  # 1. +name.to_s.upcase+ environment variable, if present
   # 2. Otherwise, user-defined top-level constant named `name.to_s.upcase`
   # 3. Otherwise, default set with {smart_const}
-  # 4. Otherwise, nil
+  # 4. Otherwise, +nil+
   # 
   # @param name [#to_s] constant's name
   def smart_const_get(name)
