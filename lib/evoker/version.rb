@@ -8,7 +8,7 @@ module Evoker
     MINOR = 0
 
     # Tiny version number
-    TINY  = 8
+    TINY  = 9
 
     # Full version number as string
     STRING = [MAJOR, MINOR, TINY].join('.')
