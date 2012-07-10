@@ -55,8 +55,8 @@ module Evoker
     build_path = File.expand_path(smart_const_get(:build_path))
     download_path = File.expand_path(smart_const_get(:download_path))
 
-    mkdir_p build_path unless Dir.exists?(build_path)
-    mkdir_p download_path unless Dir.exists?(download_path)
+    mkdir_p build_path unless File.directory?(build_path)
+    mkdir_p download_path unless File.directory?(download_path)
 
     tarball_filename = args[:filename] || File.basename(tarball_url)
     tarball_path = File.join(download_path, tarball_filename)
