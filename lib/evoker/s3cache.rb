@@ -34,7 +34,7 @@ module Evoker
           raise "ERROR: file #{CACHE_TARBALL} already in the bucket."
         end
       end
-      sh "tar -czf #{CACHE_TARBALL} --exclude '#{CACHE_BASENAME}*.tgz' ."
+      sh "tar -czf #{CACHE_TARBALL} --exclude '#{CACHE_BASENAME}*.tgz' * .[^.]*"
       puts "INFO: uploading #{CACHE_TARBALL} to #{CACHE_S3_BUCKET}..."
 
       # retry upload 3 times
