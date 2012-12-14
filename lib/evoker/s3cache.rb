@@ -34,8 +34,11 @@ module Evoker
           raise "ERROR: file #{CACHE_TARBALL} already in the bucket."
         end
       end
-      sh "tar -czf #{CACHE_TARBALL} --exclude '#{CACHE_BASENAME}*.tgz' * .[^.]*"
-      puts "INFO: uploading #{CACHE_TARBALL} to #{CACHE_S3_BUCKET}..."
+      puts "INFO: archiving #{CACHE_TARBALL}"
+      system 'tar', '-czf', CACHE_TARBALL, *Dir.entries('.').reject { |fn|
+        fn == '.' or fn == '..' or
+          fn =~ /#{Regexp.quote(CACHE_BASENAME)}.*\.tgz$/ }
+      puts "INFO: uploading #{CACHE_TARBALL} to #{CACHE_S3_BUCKET}"
 
       # retry upload 3 times
       _tries = 0
@@ -62,26 +65,19 @@ module Evoker
       bucket = _get_bucket
 
       if wait > 0
-        print "Waiting for #{CACHE_TARBALL} .."
+        puts "Waiting for #{CACHE_TARBALL} ..."
         STDOUT.flush
         bucket.wait_for(wait) {
-          print '.'
-          STDOUT.flush
           bucket.files.find { |f| f.key == CACHE_TARBALL }
         } or raise "Timed out waiting for #{CACHE_TARBALL}"
-        puts " got it."
       end
 
-      print "Downloading #{CACHE_TARBALL} .."
-      STDOUT.flush
+      puts "Downloading #{CACHE_TARBALL} ..."
       File.open(CACHE_TARBALL, 'w') { |tarball_file|
         bucket.files.get(CACHE_TARBALL) { |tarball_contents, _, _|
-          print '.'
-          STDOUT.flush
           tarball_file.write(tarball_contents)
         }
       }
-      puts " got it."
 
       sh "tar -xzf #{CACHE_TARBALL}"
     end
