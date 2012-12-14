@@ -2,9 +2,7 @@
 
 require 'evoker'
 require 'fog'
-require 'archive/tar/minitar'
 require 'rake/clean'
-require 'zlib'
 
 module Evoker
   def _get_bucket
@@ -37,12 +35,9 @@ module Evoker
         end
       end
       puts "INFO: archiving #{CACHE_TARBALL}"
-      tgz = Zlib::GzipWriter.new(File.open(CACHE_TARBALL, 'wb'))
-      Archive::Tar::Minitar.pack(
-        Dir.entries('.').reject { |fn|
-          fn == '.' or fn == '..' or
-            fn =~ /#{Regexp.quote(CACHE_BASENAME)}.*\.tgz$/ },
-        tgz)
+      system 'tar', '-czf', CACHE_TARBALL, *Dir.entries('.').reject { |fn|
+        fn == '.' or fn == '..' or
+          fn =~ /#{Regexp.quote(CACHE_BASENAME)}.*\.tgz$/ }
       puts "INFO: uploading #{CACHE_TARBALL} to #{CACHE_S3_BUCKET}"
 
       # retry upload 3 times
