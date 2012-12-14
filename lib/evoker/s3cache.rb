@@ -70,14 +70,11 @@ module Evoker
       bucket = _get_bucket
 
       if wait > 0
-        print "Waiting for #{CACHE_TARBALL} .."
+        puts "Waiting for #{CACHE_TARBALL} ..."
         STDOUT.flush
         bucket.wait_for(wait) {
-          print '.'
-          STDOUT.flush
           bucket.files.find { |f| f.key == CACHE_TARBALL }
         } or raise "Timed out waiting for #{CACHE_TARBALL}"
-        puts " got it."
       end
 
       puts "Downloading #{CACHE_TARBALL} ..."
@@ -86,7 +83,6 @@ module Evoker
           tarball_file.write(tarball_contents)
         }
       }
-      puts " got it."
 
       sh "tar -xzf #{CACHE_TARBALL}"
     end
