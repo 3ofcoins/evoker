@@ -80,12 +80,9 @@ module Evoker
         puts " got it."
       end
 
-      print "Downloading #{CACHE_TARBALL} .."
-      STDOUT.flush
+      puts "Downloading #{CACHE_TARBALL} ..."
       File.open(CACHE_TARBALL, 'w') { |tarball_file|
         bucket.files.get(CACHE_TARBALL) { |tarball_contents, _, _|
-          print '.'
-          STDOUT.flush
           tarball_file.write(tarball_contents)
         }
       }
