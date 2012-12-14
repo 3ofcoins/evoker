@@ -91,7 +91,8 @@ module Evoker
       }
       puts " got it."
 
-      sh "tar -xzf #{CACHE_TARBALL}"
+      tgz = Zlib::GzipReader.new(File.open(CACHE_TARBALL, 'rb'))
+      Archive::Tar::Minitar.unpack(CACHE_TARBALL, '.')
     end
 
     desc "Download pre-cached entities from an S3 bucket if available; download normally and cache if not available."
